@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProdutosDAO {
 
@@ -21,7 +22,7 @@ public class ProdutosDAO {
     PreparedStatement prep;
     ResultSet resultset;
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
-    
+
     public boolean connectDB() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -33,8 +34,7 @@ public class ProdutosDAO {
             return false;
         }
     }
-    
-    
+
     public int cadastrarProduto(ProdutosDTO produto) {
         int status;
         try {
@@ -51,7 +51,7 @@ public class ProdutosDAO {
 
     }
 
-      public void desconectar() {
+    public void desconectar() {
         try {
             //desconectando do banco de dados
             conn.close();
@@ -59,11 +59,28 @@ public class ProdutosDAO {
 
         }
     }
-    
-    
-    public ArrayList<ProdutosDTO> listarProdutos() {
 
-        return listagem;
+    public List<ProdutosDTO> listarProdutos() {
+        String sql = "select * from produtos";
+
+        try {
+            prep = conn.prepareStatement(sql);
+            resultset = prep.executeQuery();
+            List<ProdutosDTO> lista = new ArrayList();
+
+            while (resultset.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                produto.setNome(resultset.getString("nome"));
+                produto.setValor(resultset.getInt("valor"));
+                produto.setStatus(resultset.getString("status"));
+                lista.add(produto);
+            }
+            return lista;
+        } catch (SQLException ex) {
+            System.out.println("Ocorreu o seguinte erro: " + ex.getMessage());
+            return null;
+        }
+      
     }
 
 }
