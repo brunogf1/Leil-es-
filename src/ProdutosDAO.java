@@ -50,16 +50,7 @@ public class ProdutosDAO {
         }
 
     }
-
-    public void desconectar() {
-        try {
-            //desconectando do banco de dados
-            conn.close();
-        } catch (SQLException ex) {
-
-        }
-    }
-
+    
     public List<ProdutosDTO> listarProdutos() {
         String sql = "select * from produtos";
 
@@ -70,6 +61,7 @@ public class ProdutosDAO {
 
             while (resultset.next()) {
                 ProdutosDTO produto = new ProdutosDTO();
+                produto.setId(resultset.getInt("id"));
                 produto.setNome(resultset.getString("nome"));
                 produto.setValor(resultset.getInt("valor"));
                 produto.setStatus(resultset.getString("status"));
@@ -82,5 +74,48 @@ public class ProdutosDAO {
         }
       
     }
+    
+    public List<ProdutosDTO> listarProdutosVendidos(String filtro) {
+        String sql = "select * from produtos";
 
+        if (!filtro.isEmpty()) {
+            //filtro para mostrar dados da categoria filtrada
+            sql = sql + " where status like ?";
+        }
+
+        try {
+            prep = conn.prepareStatement(sql);
+
+            if (!filtro.isEmpty()) {
+                prep.setString(1,"%"+ filtro+"%");
+            }
+
+            resultset = prep.executeQuery();
+            List<ProdutosDTO> lista = new ArrayList();
+
+            while (resultset.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                produto.setId(resultset.getInt("id"));
+                produto.setNome(resultset.getString("nome"));
+                produto.setValor(resultset.getInt("valor"));
+                produto.setStatus(resultset.getString("status"));
+                lista.add(produto);
+            }
+            return lista;
+        } catch (SQLException ex) {
+            System.out.println("Ocorreu o seguinte erro: " + ex.getMessage());
+            return null;
+        }
+
+    }
+    
+    
+     public void desconectar() {
+        try {
+            //desconectando do banco de dados
+            conn.close();
+        } catch (SQLException ex) {
+
+        }
+    }
 }

@@ -148,8 +148,8 @@ public class listagemVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        //vendasVIEW vendas = new vendasVIEW(); 
-        //vendas.setVisible(true);
+        vendasView vendas = new vendasView(); 
+        vendas.setVisible(true);
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -172,6 +172,7 @@ public class listagemVIEW extends javax.swing.JFrame {
 
             for (ProdutosDTO p : listaProdutos) {
                 Object[] obj = new Object[]{
+                 p.getId(),
                  p.getNome(),
                  p.getValor(),
                  p.getStatus()

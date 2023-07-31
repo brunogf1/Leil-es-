@@ -150,7 +150,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
         
         produto.setNome(cadastroNome.getText());
         produto.setValor(Integer.parseInt(cadastroValor.getText()));
-        produto.setStatus("vendido");
+        produto.setStatus("à venda");
         
         status = dao.connectDB();
         if (status == false) {
@@ -160,7 +160,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
             if (resposta == 1) {
                 JOptionPane.showMessageDialog(null, "Dados incluidos com sucesso");
             } else if (resposta == 1062) {
-                JOptionPane.showMessageDialog(null, "Filme já foi cadastrado! Insira novamente outro filme.");
+                JOptionPane.showMessageDialog(null, "Produto já foi cadastrado! Insira novamente outro produto.");
             } else {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar inserir dados");
             }
