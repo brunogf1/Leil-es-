@@ -23,17 +23,18 @@ public class ProdutosDAO {
     ResultSet resultset;
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
 
-    public boolean connectDB() {
+   public Connection connectDB() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            //conectando com o banco de dados, colocando o nome do banco, nome do usuário e a senha
+            // Conectando com o banco de dados, colocando o nome do banco, nome do usuário e a senha
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/uc11", "root", "Azaza130705");
-            return true;
+            return conn;
         } catch (ClassNotFoundException | SQLException ex) {
             System.out.println("Ocorreu o seguinte erro:" + ex.getMessage());
-            return false;
+            return null;
         }
     }
+
 
     public int cadastrarProduto(ProdutosDTO produto) {
         int status;
@@ -75,6 +76,26 @@ public class ProdutosDAO {
       
     }
     
+    public void venderProduto(String idProduto) {
+        String sql = "UPDATE produtos SET status = 'vendido' WHERE id = ?";
+
+        try {
+            // Obtém a conexão com o banco de dados usando o método connectDB
+            conn = connectDB();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, idProduto);
+            stmt.executeUpdate();
+            // Fecha o statement após o uso
+            stmt.close();
+        } catch (SQLException e) {
+            // Trate os erros de forma adequada para sua aplicação
+            e.printStackTrace();
+        } 
+    }
+
+        
+    
+    
     public List<ProdutosDTO> listarProdutosVendidos(String filtro) {
         String sql = "select * from produtos";
 
@@ -110,12 +131,13 @@ public class ProdutosDAO {
     }
     
     
-     public void desconectar() {
-        try {
-            //desconectando do banco de dados
-            conn.close();
-        } catch (SQLException ex) {
-
+      public void desconectar() {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

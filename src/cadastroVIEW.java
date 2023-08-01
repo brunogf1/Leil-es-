@@ -1,6 +1,6 @@
 
 import javax.swing.JOptionPane;
-
+import java.sql.Connection;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -144,16 +144,15 @@ public class cadastroVIEW extends javax.swing.JFrame {
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         ProdutosDTO produto = new ProdutosDTO();
         ProdutosDAO dao = new ProdutosDAO();
-    
-        boolean status;
+        
         int resposta;
         
         produto.setNome(cadastroNome.getText());
         produto.setValor(Integer.parseInt(cadastroValor.getText()));
         produto.setStatus("à venda");
         
-        status = dao.connectDB();
-        if (status == false) {
+       Connection conn = dao.connectDB();
+        if (conn == null) {
             JOptionPane.showMessageDialog(null, "Erro de conexão");
         } else {
             resposta = dao.cadastrarProduto(produto);

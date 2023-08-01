@@ -1,4 +1,5 @@
 
+import java.sql.Connection;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -106,8 +107,8 @@ public class vendasView extends javax.swing.JFrame {
         
         String filtro = "vendido";
         ProdutosDAO dao = new ProdutosDAO();
-        boolean status = dao.connectDB();
-        if (status == false) {
+       Connection conn = dao.connectDB();
+        if (conn == null) {
             JOptionPane.showMessageDialog(null, "Erro de conexão");
         } else {
 
