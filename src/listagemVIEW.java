@@ -1,5 +1,9 @@
 
+import java.sql.Connection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -9,7 +13,6 @@ import javax.swing.table.TableRowSorter;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author Adm
@@ -139,28 +142,32 @@ public class listagemVIEW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-        String id = id_produto_venda.getText();
-        
-        ProdutosDAO produtosdao = new ProdutosDAO();
-        
-        //produtosdao.venderProduto(Integer.parseInt(id));
-        listarProdutos();
+      
+     atualizarProdutoVendido();      
+
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        //vendasVIEW vendas = new vendasVIEW(); 
-        //vendas.setVisible(true);
+        vendasView vendas = new vendasView();
+        vendas.setVisible(true);
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void listarProdutos(){
-  
+    private void atualizarProdutoVendido() {
+        String idProduto = id_produto_venda.getText();
+        ProdutosDAO dao = new ProdutosDAO(); // Criar uma instância de ProdutosDAO
+        dao.venderProduto(idProduto); // Chamar o método através da instância
+        listarProdutos();
+    }
+
+    private void listarProdutos() {
+
         ProdutosDAO dao = new ProdutosDAO();
-        boolean status = dao.connectDB();
-        if (status == false) {
+        Connection conn = dao.connectDB();
+        if (conn == null) {
             JOptionPane.showMessageDialog(null, "Erro de conexão");
         } else {
 
@@ -172,9 +179,10 @@ public class listagemVIEW extends javax.swing.JFrame {
 
             for (ProdutosDTO p : listaProdutos) {
                 Object[] obj = new Object[]{
-                 p.getNome(),
-                 p.getValor(),
-                 p.getStatus()
+                    p.getId(),
+                    p.getNome(),
+                    p.getValor(),
+                    p.getStatus()
                 };
                 tabelaProdutos.addRow(obj);
             }
@@ -182,7 +190,6 @@ public class listagemVIEW extends javax.swing.JFrame {
         }
     }
 
-    
     /**
      * @param args the command line arguments
      */
@@ -218,9 +225,7 @@ public class listagemVIEW extends javax.swing.JFrame {
         });
     }
 
-    
-    
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TbProdutos;
     private javax.swing.JButton btnVendas;
@@ -234,5 +239,4 @@ public class listagemVIEW extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 
-    
 }
